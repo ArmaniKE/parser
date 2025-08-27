@@ -5,15 +5,12 @@ import cors from "cors";
 
 const app = express();
 
-// const PORT = process.env.PORT || 3001;
-// app.use(cors({ origin: "https://cpk-blue.vercel.app/" }));
-
 app.use(
   cors({
     origin: [
-      "https://capital-plast.vercel.app/",
+      "https://capital-plast.vercel.app",
       "http://localhost:3000",
-      "https://cpk-blue.vercel.app/",
+      "https://cpk-blue.vercel.app",
     ],
     methods: ["GET", "POST", "OPTIONS"],
     allowedHeaders: ["Content-Type"],
@@ -22,7 +19,6 @@ app.use(
 
 const PORT = process.env.PORT || 3001;
 
-// Читаем JSON при каждом запросе (данные всегда свежие)
 app.get("/api/products", (req, res) => {
   try {
     const dataPath = path.join(process.cwd(), "parsed.json");
@@ -37,11 +33,11 @@ app.get("/api/products", (req, res) => {
       quantity: item["Остаток"],
     }));
 
-    res.json(transformed);
-    // res.json(json);
+    res.set("Cache-Control", "no-store");
+    return res.json(transformed);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: "Ошибка чтения данных" });
+    return res.status(500).json({ error: "Ошибка чтения данных" });
   }
 });
 
