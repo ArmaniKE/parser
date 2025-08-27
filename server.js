@@ -4,9 +4,23 @@ import path from "path";
 import cors from "cors";
 
 const app = express();
-const PORT = process.env.PORT || 3001;
 
-app.use(cors({ origin: "http://localhost:3000" }));
+// const PORT = process.env.PORT || 3001;
+// app.use(cors({ origin: "https://cpk-blue.vercel.app/" }));
+
+app.use(
+  cors({
+    origin: [
+      "https://capital-plast.vercel.app/",
+      "http://localhost:3000",
+      "https://cpk-blue.vercel.app/",
+    ],
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type"],
+  })
+);
+
+const PORT = process.env.PORT || 3001;
 
 // Читаем JSON при каждом запросе (данные всегда свежие)
 app.get("/api/products", (req, res) => {
